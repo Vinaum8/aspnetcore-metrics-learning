@@ -14,4 +14,11 @@ node {
     }
     sh "docker push 13072347/${JOB_NAME}:latest"
    }
+
+   stage('Run Container on Server'){
+     def dockerRun = 'docker compose up -d --force-recreate net-application'
+     sshagent(['dev-server']) {
+       sh "ssh -o StrictHostKeyChecking=no ubuntu@140.238.187.247 ${dockerRun}"
+     }
+   }
 }
