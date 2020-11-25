@@ -4,7 +4,7 @@ node {
 
         checkout scm
 
-    stage name: "Build Image",  body: {
+    stage ('Build Image') {
         sh "docker build -t prometheustest:${ENV.BUILD_TAG} ."
     }
 }
