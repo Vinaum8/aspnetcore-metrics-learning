@@ -37,9 +37,11 @@ services:
   jenkins:
     container_name: jenkins-test
     image: jenkins/jenkins:lts
+    privileged: false
     volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
     - ./jenkins/jenkins_home/:/var/jenkins_home/
-    networks: 
+    networks:
       - mynetwork
 
 networks:

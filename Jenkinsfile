@@ -1,15 +1,16 @@
 node {
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
-
         checkout scm
-
-    /* stage ('Build Image') {
-        sh "docker build -t prometheustest:v${BUILD_NUMBER} ."
-    } */
+    }
 
     stage('Build Image') {
-        docker.build "prometheustest:${env.BUILD_TAG}"
+        docker.build "${BUILD_NUMBER}"
     }
-}
+
+    stage('Push Image to Repository'){
+        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]){
+            docker.Push('latest')
+        }
+    }
 }
