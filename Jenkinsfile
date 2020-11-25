@@ -4,8 +4,12 @@ node {
 
         checkout scm
 
-    stage ('Build Image') {
-        sh "docker build -t prometheustest:${BUILD_NUMBER} ."
+    /* stage ('Build Image') {
+        sh "docker build -t prometheustest:v${BUILD_NUMBER} ."
+    } */
+
+    stage('Build Image') {
+        docker.build "prometheustest:${env.BUILD_TAG}"
     }
 }
 }
