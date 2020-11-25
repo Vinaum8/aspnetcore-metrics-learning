@@ -13,7 +13,7 @@ services:
 
   net-application:
     container_name: net-application
-    image: prometheustest:latest
+    image: 13072347/docker-app
     restart: always
     networks:
       - mynetwork
