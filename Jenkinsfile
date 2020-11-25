@@ -8,9 +8,10 @@ node {
         docker.build "${JOB_NAME}:${BUILD_NUMBER}"
     }
 
-    stage('Push Image to Repository'){
-        withCredentials([string(credentialsId: 'DockerHubPassword', variable: 'dockerHubPwd')]){
-            docker.Push('latest')
-        }
-    }
+     stage('Push Docker Image'){
+     withCredentials([string(credentialsId: 'DockerHubPassword', variable: 'dockerHubPwd')]) {
+        sh "docker login -u 13072347 -p ${dockerHubPwd}"
+     }
+     sh 'docker push 13072347/prometheustest:latest'
+   }
 }
