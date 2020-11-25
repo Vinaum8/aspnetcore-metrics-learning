@@ -5,7 +5,7 @@ node {
     }
 
     stage('Build Image') {
-        docker.build "${BUILD_NUMBER}"
+        docker.build "${JOB_NAME}:${BUILD_NUMBER}"
     }
 
     stage('Push Image to Repository'){
