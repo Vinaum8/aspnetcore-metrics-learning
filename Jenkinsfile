@@ -9,7 +9,7 @@ node {
     }
 
     stage('Push Image to Repository'){
-        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]){
+        withCredentials([string(credentialsId: 'DockerHubPwd', variable: 'dockerHubPwd')]){
             docker.Push('latest')
         }
     }
