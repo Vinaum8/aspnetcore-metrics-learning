@@ -5,7 +5,7 @@ node {
         checkout scm
 
     stage ('Build Image') {
-        sh "docker build -t prometheustest:${ENV.BUILD_TAG} ."
+        sh "docker build -t prometheustest:${BUILD_NUMBER} ."
     }
 }
 }
