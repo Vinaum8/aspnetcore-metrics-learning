@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  nginx:
+    container_name: ingress-test
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - mynetwork
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  net-application:
+    container_name: net-application
+    image: prometheustest:latest
+    restart: always
+    networks:
+      - mynetwork
+
+  grafana:
+    container_name: grafana-test
+    image: grafana/grafana:latest
+    volumes:
+      - ./grafana/:/var/lib/grafana/
+    networks:
+      - mynetwork
+
+  prometheus:
+    container_name: prometheus-test
+    image: prom/prometheus:latest
+    volumes:
+     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks: 
+      - mynetwork
+
+  jenkins:
+    container_name: jenkins-test
+    image: jenkins/jenkins:lts
+    volumes:
+    - ./jenkins/jenkins_home/:/var/jenkins_home/
+    networks: 
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
