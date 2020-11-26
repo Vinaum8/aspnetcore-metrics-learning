@@ -16,10 +16,9 @@ node {
    }
 
    stage('Run Container on Server'){
-     def dockerRun = 'docker-compose up -d --force-recreate net-application'
+     def dockerRun = 'docker-compose up -f aspnetcore-metrics-app/container/docker-compose.yaml -d --force-recreate net-application'
      sshagent(['dev-server']) {
-       sh "ssh -o StrictHostKeyChecking=no ubuntu@40.87.6.132 cd aspnetcore-metrics-app/container/ \ 
-       ${dockerRun}"
+       sh "ssh -o StrictHostKeyChecking=no ubuntu@40.87.6.132 ${dockerRun}"
      }
    }
 }
