@@ -1,16 +1,5 @@
 version: '3.8'
 services:
-  nginx:
-    container_name: ingress-test
-    image: nginx:latest
-    restart: always
-    ports:
-      - 80:80
-    networks:
-      - mynetwork
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-
   net-application:
     container_name: net-application
     image: 13072347/docker-app
@@ -43,6 +32,17 @@ services:
     - ./jenkins/jenkins_home/:/var/jenkins_home/
     networks:
       - mynetwork
+
+  nginx:
+    container_name: ingress-test
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - mynetwork
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
 networks:
   mynetwork:
