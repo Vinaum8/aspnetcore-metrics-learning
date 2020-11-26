@@ -22,22 +22,3 @@ node {
      }
    }
 }
-
-
-git clone https://github.com/Vinaum8/aspnetcore-metrics-app.git
-
-cd aspnetcore-metrics-app/container/
-
-mkdir grafana
-mkdir jenkins
-mkdir jenkins/jenkins_home/
-
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-sudo chmod +x /usr/local/bin/docker-compose
-
-sudo chown -R :root prometheus/
-sudo chown -R :root nginx/
-sudo chown -R :root jenkins/
-sudo chmod 770 jenkins/jenkins_home/
-sudo chown -R :root grafana/
