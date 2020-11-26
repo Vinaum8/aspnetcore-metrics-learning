@@ -18,7 +18,7 @@ node {
    stage('Run Container on Server'){
      def dockerRun = 'docker compose up -d --force-recreate net-application'
      sshagent(['dev-server']) {
-       sh "ssh -o StrictHostKeyChecking=no ubuntu@140.238.187.247 ${dockerRun}"
+       sh "ssh -o StrictHostKeyChecking=no ubuntu@152.67.44.8 ${dockerRun}"
      }
    }
 }
