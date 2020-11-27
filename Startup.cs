@@ -56,6 +56,7 @@ namespace prometheus_test
             });
 
             app.UseMetricServer();
+            
         }
     }
 }
