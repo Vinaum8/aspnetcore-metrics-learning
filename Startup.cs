@@ -57,7 +57,7 @@ namespace prometheus_test
 
             app.UseMetricServer();
 
-            // testando o build
+            // testando o build suahuahuahauha
 
         }
     }
