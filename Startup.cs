@@ -56,7 +56,9 @@ namespace prometheus_test
             });
 
             app.UseMetricServer();
-            
+
+            // testando o build
+
         }
     }
 }
