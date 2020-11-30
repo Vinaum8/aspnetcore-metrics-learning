@@ -21,4 +21,8 @@ node {
        sh "ssh -o StrictHostKeyChecking=no ubuntu@40.87.6.132 ${dockerRun}"
      }
    }
+
+   stage {
+      mail bcc: '', body: 'Pipeline executada com sucesso.', cc: '', from: '', replyTo: '', subject: 'Jenkins - Build', to: 'vinaumpt@gmail.com'
+   }
 }
