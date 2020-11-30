@@ -22,7 +22,7 @@ node {
      }
    }
 
-   stage {
+   stage ('Email Notification'){
       mail bcc: '', body: 'Pipeline executada com sucesso.', cc: '', from: '', replyTo: '', subject: 'Jenkins - Build', to: 'vinaumpt@gmail.com'
    }
 }
