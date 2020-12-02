@@ -50,7 +50,6 @@ services:
   sonarqube:
     container_name: sonarqube-test
     image: sonarqube:8-community
-    command: sysctl -w vm.max_map_count=262144
     depends_on:
       - postgres-db
     environment:
