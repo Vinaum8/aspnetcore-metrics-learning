@@ -49,7 +49,7 @@ services:
     image: sonarqube:lts
     restart: always
     volumes:
-      -./sonarqube/:/opt/sonarqube/
+      - ./sonarqube/:/opt/sonarqube/
     networks: 
       - mynetwork
 
