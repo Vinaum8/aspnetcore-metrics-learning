@@ -44,6 +44,15 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
+  sonarqube:
+    container_name: sonarqube-test
+    image: sonarqube:lts
+    restart: always
+    volumes:
+      -./sonarqube/:/opt/sonarqube/
+    networks: 
+      - mynetwork
+
 networks:
   mynetwork:
     driver: bridge

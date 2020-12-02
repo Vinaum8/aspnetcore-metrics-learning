@@ -4,6 +4,10 @@ node {
         checkout scm
     }
 
+    stage('Sonarqube - Testing'){
+      
+    }
+
     stage('Build Image') {
         docker.build "13072347/${JOB_NAME}:latest"
     }
