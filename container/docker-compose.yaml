@@ -80,7 +80,8 @@ services:
     container_name: adminer-test
     image: adminer
     restart: always
-    ADMINER_DESIGN: galkaev
+    environment: 
+    - ADMINER_DESIGN: galkaev
     networks: 
       - mynetwork
 
