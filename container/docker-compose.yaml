@@ -54,7 +54,7 @@ services:
     depends_on:
       - postgres-db
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://postgres-db:5432/sonar?currentSchema=sonarqube
+      SONAR_JDBC_URL: jdbc:postgresql://postgres-db:5432/sonarqube?currentSchema=sonarqube
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar
     volumes:
