@@ -81,7 +81,7 @@ services:
     image: adminer
     restart: always
     environment: 
-    - ADMINER_DESIGN: galkaev
+      ADMINER_DESIGN: galkaev
     networks: 
       - mynetwork
 
