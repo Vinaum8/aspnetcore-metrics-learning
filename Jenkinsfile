@@ -9,24 +9,24 @@ node {
     }
 
     stage('Build Image') {
-        docker.build "13072347/${JOB_NAME}:latest"
+        docker.build "$YOUR_USER/${JOB_NAME}:latest"
     }
 
     stage('Push Docker Image'){
      withCredentials([string(credentialsId: 'DockerHubPassword', variable: 'dockerHubPwd')]) {
-        sh "docker login -u 13072347 -p ${dockerHubPwd}"
+        sh "docker login -u $YOUR_USER -p ${dockerHubPwd}"
     }
-    sh "docker push 13072347/${JOB_NAME}:latest"
+    sh "docker push $YOUR_USER/${JOB_NAME}:latest"
    }
 
    stage('Run Container on Server'){
-     def dockerRun = 'docker-compose --file aspnetcore-metrics-app/container/docker-compose.yaml up -d --force-recreate net-application'
+     def dockerRun = 'docker-compose --file aspnetcore-metrics-app/docker-compose.yaml up -d --force-recreate net-application'
      sshagent(['dev-server']) {
-       sh "ssh -o StrictHostKeyChecking=no ubuntu@40.87.6.132 ${dockerRun}"
+       sh "ssh -o StrictHostKeyChecking=no $REMOTE_USER@$IP_ADDRES_SERVER ${dockerRun}"
      }
    }
 
    stage ('Email Notification'){
-      mail bcc: '', body: 'Pipeline executada com sucesso.', cc: '', from: '', replyTo: '', subject: 'Jenkins - Build', to: 'vinaumpt@gmail.com'
+      mail bcc: '', body: 'PIPELINE SUCCESS!', cc: '', from: '', replyTo: '', subject: 'Jenkins - Build', to: 'YOUR_EMAIL_TO_NOTIFICATION'
    }
 }
