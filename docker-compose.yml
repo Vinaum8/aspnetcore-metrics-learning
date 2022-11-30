@@ -2,7 +2,21 @@ version: '3.8'
 services:
   net-application:
     container_name: net-application
-    image: 13072347/docker-app
+    build: ./app/
+    restart: always
+    networks:
+      - mynetwork
+
+  net-application2:
+    container_name: net-application2
+    build: ./app/
+    restart: always
+    networks:
+      - mynetwork
+
+  net-application3:
+    container_name: net-application3
+    build: ./app/
     restart: always
     networks:
       - mynetwork
@@ -46,7 +60,7 @@ services:
 
 
   ## for this container (sonarqube), require execute this command on host machine:
-    ## sudo sysctl -w vm.max_map_count=262144
+  ## sudo sysctl -w vm.max_map_count=262144
   sonarqube:
     container_name: sonarqube-test
     image: sonarqube:8-community
@@ -69,7 +83,7 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: adminnn
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     volumes: 
       - /var/lib/postgresql/data:/var/lib/postgresql/data
