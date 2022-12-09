@@ -25,7 +25,7 @@ services:
     container_name: grafana-test
     image: grafana/grafana:latest
     volumes:
-      - ./grafana/:/var/lib/grafana/
+      - ./grafana/:/var/lib/grafana/:rw
     networks:
       - mynetwork
 
