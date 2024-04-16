@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  net-application:
+  net-application: &app
     container_name: net-application
     build: ./app/
     restart: always
@@ -8,33 +8,21 @@ services:
       - mynetwork
 
   net-application2:
+    <<: *app
     container_name: net-application2
-    build: ./app/
-    restart: always
-    networks:
-      - mynetwork
 
   net-application3:
+    <<: *app
     container_name: net-application3
-    build: ./app/
-    restart: always
-    networks:
-      - mynetwork
 
-  grafana:
-    container_name: grafana-test
-    image: grafana/grafana:latest
-    volumes:
-      - ./grafana/:/var/lib/grafana/:rw
+  olgtm:
+    image: grafana/otel-lgtm
+    ports:
+      - 3000:3000  # grafana (admin, admin)
+      - 9090:9090  # prometheus
+      - 4318:4318  # collector http
+      - 4317:4317  # collector grpc
     networks:
-      - mynetwork
-
-  prometheus:
-    container_name: prometheus-test
-    image: prom/prometheus:latest
-    volumes:
-     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks: 
       - mynetwork
 
   jenkins:
@@ -57,7 +45,6 @@ services:
       - mynetwork
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-
 
   ## for this container (sonarqube), require execute this command on host machine:
   ## sudo sysctl -w vm.max_map_count=262144
