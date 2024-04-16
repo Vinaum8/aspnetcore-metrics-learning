@@ -1,26 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace prometheus_test
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+async Task<String> SendGreeting(ILogger<Program> logger)
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+    // Create a new Activity scoped to the method
+    using var activity = greeterActivitySource.StartActivity("GreeterActivity");
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    // Log a message
+    logger.LogInformation("Sending greeting");
+
+    // Increment the custom counter
+    countGreetings.Add(1);
+
+    // Add a tag to the Activity
+    activity?.SetTag("greeting", "Hello World!");
+
+    return "Hello World!";
 }
+
+app.MapGet("/", SendGreeting);
+
+app.Run();
