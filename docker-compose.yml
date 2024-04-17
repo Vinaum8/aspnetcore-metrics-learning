@@ -8,6 +8,10 @@ services:
       - OTLP_ENDPOINT_URL=http://olgtm:4317
     labels:
       - logging=promtail
+    # logging:
+    #   driver: loki
+    #   options:
+    #     loki-url: https://<username>:<api-key>@logs-prod-us-central1.grafana.net/api/prom/push 
     networks:
       - mynetwork
 
