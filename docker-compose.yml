@@ -1,44 +1,55 @@
-version: '3.8'
+# version: '3.8'
 services:
-  net-application:
-    container_name: net-application
+  netcore1: 
+    hostname: netcore1
     build: ./app/
     restart: always
+    environment:
+      - OTLP_ENDPOINT_URL=http://olgtm:4317
+    labels:
+      - logging=promtail
     networks:
       - mynetwork
 
-  net-application2:
-    container_name: net-application2
-    build: ./app/
+  netcore2:
+    hostname: netcore2
+    image: aspnetcore-metrics-learning-netcore1:latest
     restart: always
+    environment:
+      - OTLP_ENDPOINT_URL=http://olgtm:4317
+    labels:
+      - logging=promtail
+    depends_on:
+      - netcore1
     networks:
       - mynetwork
 
-  net-application3:
-    container_name: net-application3
-    build: ./app/
+  netcore3:
+    hostname: netcore3
+    image: aspnetcore-metrics-learning-netcore1:latest
     restart: always
+    environment:
+      - OTLP_ENDPOINT_URL=http://olgtm:4317
+    labels:
+      - logging=promtail
+    depends_on:
+      - netcore1
     networks:
       - mynetwork
 
-  grafana:
-    container_name: grafana-test
-    image: grafana/grafana:latest
-    volumes:
-      - ./grafana/:/var/lib/grafana/:rw
+  olgtm:
+    container_name: olgtm
+    image: grafana/otel-lgtm
+    ports:
+      - 3000:3000  # grafana (admin, admin)
+      - 9090:9090  # prometheus
+      - 4318:4318  # collector http
+      - 4317:4317  # collector grp
     networks:
-      - mynetwork
-
-  prometheus:
-    container_name: prometheus-test
-    image: prom/prometheus:latest
-    volumes:
-     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks: 
       - mynetwork
 
   jenkins:
-    container_name: jenkins-test
+    container_name: jenkins
     image: jenkins/jenkins:lts
     privileged: true
     volumes:
@@ -48,7 +59,6 @@ services:
       - mynetwork
 
   nginx:
-    container_name: ingress-test
     image: nginx:latest
     restart: always
     ports:
@@ -58,11 +68,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
-
   ## for this container (sonarqube), require execute this command on host machine:
   ## sudo sysctl -w vm.max_map_count=262144
   sonarqube:
-    container_name: sonarqube-test
+    container_name: sonarqube
     image: sonarqube:8-community
     depends_on:
       - postgres-db
@@ -76,6 +85,20 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_temp:/opt/sonarqube/temp
     networks: 
+      - mynetwork
+
+  promtail-agent:
+    container_name: promtail-agent
+    image: grafana/promtail:latest
+    volumes:
+      - ./promtail/promtail-config.yaml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      LOKI_USERNAME: admin
+      LOKI_PASSWORD: gatewayzin-loki
+    command: ["-config.file=/etc/promtail/config.yml", "-config.expand-env=true"]
+    networks:
       - mynetwork
 
   postgres-db:
