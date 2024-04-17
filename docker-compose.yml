@@ -1,32 +1,78 @@
-version: '3.8'
+# version: '3.8'
 services:
-  net-application: &app
-    container_name: net-application
+  netcore1: 
+    hostname: netcore1
     build: ./app/
     restart: always
+    environment:
+      - OTLP_ENDPOINT_URL=http://olgtm:4317
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://olgtm:4317
+      # - OTEL_EXPORTER=otlp_span
+      # - OTEL_EXPORTER_OTLP_INSECURE=true
+      # - ApplicationName=myAppName
+      # - OTEL_METRICS_EXPORTER=none
+      # - OTEL_TRACES_SAMPLER=traceidratio
+      # - OTEL_TRACES_SAMPLER_ARG=1.0s
+    labels:
+      - logging=promtail
     networks:
       - mynetwork
 
-  net-application2:
-    <<: *app
-    container_name: net-application2
+  netcore2:
+    hostname: netcore2
+    image: aspnetcore-metrics-learning-netcore1:latest
+    restart: always
+    environment:
+      - OTLP_ENDPOINT_URL=http://olgtm:4317
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://olgtm:4317
+      # - OTEL_EXPORTER=otlp_span
+      # - OTEL_EXPORTER_OTLP_INSECURE=true
+      # - ApplicationName=myAppName
+      # - OTEL_METRICS_EXPORTER=none
+      # - OTEL_TRACES_SAMPLER=traceidratio
+      # - OTEL_TRACES_SAMPLER_ARG=1.0
+    labels:
+      - logging=promtail
+    depends_on:
+      - netcore1
+    networks:
+      - mynetwork
 
-  net-application3:
-    <<: *app
-    container_name: net-application3
+  netcore3:
+    hostname: netcore3
+    image: aspnetcore-metrics-learning-netcore1:latest
+    restart: always
+    environment:
+      - OTLP_ENDPOINT_URL=http://olgtm:4317
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://olgtm:4317
+      # - OTEL_EXPORTER=otlp_span
+      # - OTEL_EXPORTER_OTLP_INSECURE=true
+      # - ApplicationName=myAppName
+      # - OTEL_METRICS_EXPORTER=none
+      # - OTEL_TRACES_SAMPLER=traceidratio
+      # - OTEL_TRACES_SAMPLER_ARG=1.0
+    labels:
+      - logging=promtail
+    depends_on:
+      - netcore1
+    networks:
+      - mynetwork
 
   olgtm:
+    container_name: olgtm
     image: grafana/otel-lgtm
     ports:
       - 3000:3000  # grafana (admin, admin)
       - 9090:9090  # prometheus
       - 4318:4318  # collector http
-      - 4317:4317  # collector grpc
+      - 4317:4317  # collector grp
+    volumes:
+     - ./prometheus/prometheus.yml:/otel-lgtm/prometheus.yaml
     networks:
       - mynetwork
 
   jenkins:
-    container_name: jenkins-test
+    container_name: jenkins
     image: jenkins/jenkins:lts
     privileged: true
     volumes:
@@ -36,7 +82,6 @@ services:
       - mynetwork
 
   nginx:
-    container_name: ingress-test
     image: nginx:latest
     restart: always
     ports:
@@ -49,7 +94,7 @@ services:
   ## for this container (sonarqube), require execute this command on host machine:
   ## sudo sysctl -w vm.max_map_count=262144
   sonarqube:
-    container_name: sonarqube-test
+    container_name: sonarqube
     image: sonarqube:8-community
     depends_on:
       - postgres-db
@@ -64,6 +109,27 @@ services:
       - sonarqube_temp:/opt/sonarqube/temp
     networks: 
       - mynetwork
+
+  promtail-agent:
+    container_name: promtail-agent
+    image: grafana/promtail:latest
+    volumes:
+      - ./promtail/promtail-config.yaml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      LOKI_USERNAME: admin
+      LOKI_PASSWORD: gatewayzin-loki
+    command: ["-config.file=/etc/promtail/config.yml", "-config.expand-env=true"]
+    networks:
+      - mynetwork
+
+  # agent:
+  #   image: grafana/agent:v0.40.4
+  #   volumes:
+  #     - ./agent.yaml:/etc/agent/agent.yaml
+  #   networks:
+  #     - mynetwork
 
   postgres-db:
     container_name: postgres-test

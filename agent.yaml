@@ -1,0 +1,10 @@
+traces:
+  configs:
+  - name: default
+    remote_write:
+      - endpoint: http://olgtm:3200
+
+    receivers:
+      otlp:
+        protocols:
+          grpc:

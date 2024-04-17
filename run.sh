@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo sysctl -w vm.max_map_count=262144
+
 # Create folder to Jenkins Files
 mkdir -p jenkins/jenkins_home
 
