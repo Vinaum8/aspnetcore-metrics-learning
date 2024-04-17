@@ -6,13 +6,6 @@ services:
     restart: always
     environment:
       - OTLP_ENDPOINT_URL=http://olgtm:4317
-      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://olgtm:4317
-      # - OTEL_EXPORTER=otlp_span
-      # - OTEL_EXPORTER_OTLP_INSECURE=true
-      # - ApplicationName=myAppName
-      # - OTEL_METRICS_EXPORTER=none
-      # - OTEL_TRACES_SAMPLER=traceidratio
-      # - OTEL_TRACES_SAMPLER_ARG=1.0s
     labels:
       - logging=promtail
     networks:
@@ -24,13 +17,6 @@ services:
     restart: always
     environment:
       - OTLP_ENDPOINT_URL=http://olgtm:4317
-      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://olgtm:4317
-      # - OTEL_EXPORTER=otlp_span
-      # - OTEL_EXPORTER_OTLP_INSECURE=true
-      # - ApplicationName=myAppName
-      # - OTEL_METRICS_EXPORTER=none
-      # - OTEL_TRACES_SAMPLER=traceidratio
-      # - OTEL_TRACES_SAMPLER_ARG=1.0
     labels:
       - logging=promtail
     depends_on:
@@ -44,13 +30,6 @@ services:
     restart: always
     environment:
       - OTLP_ENDPOINT_URL=http://olgtm:4317
-      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://olgtm:4317
-      # - OTEL_EXPORTER=otlp_span
-      # - OTEL_EXPORTER_OTLP_INSECURE=true
-      # - ApplicationName=myAppName
-      # - OTEL_METRICS_EXPORTER=none
-      # - OTEL_TRACES_SAMPLER=traceidratio
-      # - OTEL_TRACES_SAMPLER_ARG=1.0
     labels:
       - logging=promtail
     depends_on:
@@ -66,8 +45,6 @@ services:
       - 9090:9090  # prometheus
       - 4318:4318  # collector http
       - 4317:4317  # collector grp
-    volumes:
-     - ./prometheus/prometheus.yml:/otel-lgtm/prometheus.yaml
     networks:
       - mynetwork
 
@@ -123,13 +100,6 @@ services:
     command: ["-config.file=/etc/promtail/config.yml", "-config.expand-env=true"]
     networks:
       - mynetwork
-
-  # agent:
-  #   image: grafana/agent:v0.40.4
-  #   volumes:
-  #     - ./agent.yaml:/etc/agent/agent.yaml
-  #   networks:
-  #     - mynetwork
 
   postgres-db:
     container_name: postgres-test
